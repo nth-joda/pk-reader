@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  config-server:
+    image: ghcr.io/your-org/config-server:${TAG}
+    ports: ["8888:8888"]
+    restart: always
+
+  discovery-server:
+    image: ghcr.io/your-org/discovery-server:${TAG}
+    ports: ["8761:8761"]
+    depends_on: [config-server]
+    restart: always
+
+  api-gateway:
+    image: ghcr.io/your-org/api-gateway:${TAG}
+    ports: ["8080:8080"]
+    depends_on: [discovery-server]
+    restart: always
