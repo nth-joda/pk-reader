@@ -11,22 +11,29 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: content-service
+        - id: content
           uri: lb://content-service
           predicates:
             - Path=/content/**
           filters:
+            - StripPrefix=1
             - name: RequestRateLimiter
               args:
                 key-resolver: "#{@ipKeyResolver}"  # resolver lấy IP khách làm key
                 redis-rate-limiter.replenishRate: 5  # thêm 5 token/giây
                 redis-rate-limiter.burstCapacity: 10 # tối đa 10 token
-          globalfilters:
-            - JwtAuthenticationFilter
+#          globalfilters:
+#            - JwtAuthenticationFilter
   data:
     redis:
       host: localhost
       port: 6379
+
+#logging:
+#  level:
+#    root: DEBUG
+#    org.springframework.cloud.gateway: DEBUG
+#    org.springframework.cloud.netflix.eureka: DEBUG
 
 eureka:
   client:
