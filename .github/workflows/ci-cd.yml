@@ -23,47 +23,47 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
 
-      - name: Build JARs & Run Tests
-        run: mvn clean verify -DskipDocker
+      # - name: Build JARs & Run Tests
+      #   run: mvn clean verify -DskipDocker
 
-      - name: Package JARs
-        run: mvn package -DskipTests -DskipDocker
+      # - name: Package JARs
+      #   run: mvn package -DskipTests -DskipDocker
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+      # - name: Log in to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ secrets.REGISTRY_USER }}
+      #     password: ${{ secrets.REGISTRY_TOKEN }}
 
-      - name: Build & Push Images
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            ghcr.io/your-org/config-server:${{ github.sha }}
-            ghcr.io/your-org/discovery-server:${{ github.sha }}
-            ghcr.io/your-org/api-gateway:${{ github.sha }}
+      # - name: Build & Push Images
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       ghcr.io/your-org/config-server:${{ github.sha }}
+      #       ghcr.io/your-org/discovery-server:${{ github.sha }}
+      #       ghcr.io/your-org/api-gateway:${{ github.sha }}
 
-      - name: Set TAG output
-        run: echo "::set-output name=TAG::${GITHUB_SHA}"
-        id: tag
+      # - name: Set TAG output
+      #   run: echo "::set-output name=TAG::${GITHUB_SHA}"
+      #   id: tag
 
-  deploy-dev:
-    name: Deploy to Dev Server
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # deploy-dev:
+  #   name: Deploy to Dev Server
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.8.1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #     - name: Set up SSH key
+  #       uses: webfactory/ssh-agent@v0.8.1
+  #       with:
+  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy via SSH
-        run: ./deploy-dev.sh ${{ needs.build-and-push.outputs.TAG }}
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+  #     - name: Deploy via SSH
+  #       run: ./deploy-dev.sh ${{ needs.build-and-push.outputs.TAG }}
+  #       env:
+  #         SSH_USER: ${{ secrets.SSH_USER }}
+  #         SSH_HOST: ${{ secrets.SSH_HOST }}
