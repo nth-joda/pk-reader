@@ -1,0 +1,36 @@
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <!-- 1. Định nghĩa pattern console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 2. (Tuỳ chọn) File appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Correlation-Id}] %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 3. Root logger -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- 4. Logging riêng cho package -->
+    <logger name="com.dacuni.library" level="DEBUG"/>
+    <logger name="org.springframework" level="WARN"/>
+
+</configuration>
