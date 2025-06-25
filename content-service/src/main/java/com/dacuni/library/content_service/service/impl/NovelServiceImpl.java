@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ContentServiceImpl implements ContentService<NovelDto> {
+public class NovelServiceImpl implements ContentService<NovelDto> {
 
     private final NovelRepository novelRepository;
     private final NovelMapper novelMapper;
 
-    public ContentServiceImpl(NovelRepository novelRepository, NovelMapper novelMapper) {
+    public NovelServiceImpl(NovelRepository novelRepository, NovelMapper novelMapper) {
         this.novelRepository = novelRepository;
         this.novelMapper = novelMapper;
     }

@@ -12,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/novels")
-public class ContentController {
+public class NovelController {
     private final ContentService<NovelDto> contentService;
-    public ContentController(ContentService<NovelDto> contentService) {
-        this.contentService = contentService;
+    public NovelController(ContentService<NovelDto> novelService) {
+        this.contentService = novelService;
     }
 
     @GetMapping("/")
